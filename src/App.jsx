@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import { getWeatherForCities, getForect } from './services/weatherService.jsx'
+import { getWeatherForCities, getForecast } from './services/weatherService.jsx'
 import {transformCurrentWeather, transformForecast} from './utils/weatherTransform.jsx'
 import './App.css'
 import miasta from './data/weatherdata.jsx'
@@ -19,13 +19,20 @@ function App() {
 
   const [error, setError] = useState(null);
 
+  const handleAddCity = (newCity) => {
+    setWszystkieMiasta((prevCities) => [...prevCities, newCity]);
+  }
+
+  const handleRemoveCity = (cityId) => {
+    setWszystkieMiasta((prevCities) => prevCities.filter(city => city.id !== cityId));
+  }
 
   useEffect(() => {
     const loadData = async () => {
       try {
         setLoading(true);
         setError(null);
-        console.log("Pobieraniedanych...");
+        console.log("Pobieranie danych...");
 
         const currentWeatherData = await getWeatherForCities(CITIES);
         console.log("Dane pobrane:", currentWeatherData);
@@ -33,7 +40,7 @@ function App() {
         console.log(transformCities);
         const citiesWithForecast = await Promise.all(
           transformCities.map(async (city, index) => {
-            const forecastData = await getForect(CITIES[index]);
+            const forecastData = await getForecast(CITIES[index]);
             const forecast = transformForecast(forecastData);
             return {
               ...city,
@@ -67,9 +74,9 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path = "/" element = {<HomePage miasta={miasta}/>}></Route>
-          <Route path = "/miasto/:cityId" element = {<CityDetailPage miasta={miasta}/>}></Route>
-          <Route path = "/ulubione" element = {<FavoritesPage miasta={miasta}/>}></Route>
+          <Route path = "/" element = {<HomePage miasta={wszystkieMiasta} onAddCity={handleAddCity} onRemoveCity={handleRemoveCity}/>}></Route>
+          <Route path = "/miasto/:cityId" element = {<CityDetailPage miasta={wszystkieMiasta}/>}></Route>
+          <Route path = "/ulubione" element = {<FavoritesPage miasta={wszystkieMiasta}/>}></Route>
         </Routes>
       </BrowserRouter>
     </>

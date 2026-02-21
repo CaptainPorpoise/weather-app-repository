@@ -46,7 +46,7 @@ function FavoritesPage({ miasta }) {
               key={dane.id} 
               cityId={dane.id} 
               miasto={dane.miasto}  
-              temperatura={dane.aktualnaTemperatura}  
+              temperatura={dane.temperatura}  
               onClick={() => navigate(`/miasto/${dane.id}`)} 
             /> 
           ))} 
