@@ -42,26 +42,26 @@ function WeatherDetails({ miasto }){
               <strong>Zachmurzenie:</strong>
               <div>{miasto.zachmurzenie}</div>
             </div>
-            {Array.isArray(miasto.prognoza5dni) && (
-              <div className="card details-panel forecast">
-                <h3>5-dniowa prognoza</h3>
-                <div className="forecast-row">
-                  {miasto.prognoza5dni.map((dzień, idx) => (
-                    <div className="forecast-day" key={idx}>
-                       <div>
-                        <WeatherIcon condition={dzień.pogoda} size="medium"></WeatherIcon>
-                      </div>
-                      <div className="details-item"><strong>{dzień.dzień}</strong></div>
-                      <div className="details-item"> 
-                        Temperatura: {convertTemperature(dzień.temperatura, unit)}{unitSymbol} 
-                      </div>
-                      {dzień.kierunekWiatru && <div className="details-item">Kierunek wiatru: {dzień.kierunekWiatru}</div>}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
+          {Array.isArray(miasto.prognoza5dni) && (
+            <div className="forecast-section">
+              <h3>5-dniowa prognoza</h3>
+              <div className="forecast-row">
+                {miasto.prognoza5dni.map((dzień, idx) => (
+                  <div className="forecast-day" key={idx}>
+                     <div>
+                      <WeatherIcon condition={dzień.pogoda} size="medium"></WeatherIcon>
+                    </div>
+                    <div className="details-item"><strong>{dzień.dzień}</strong></div>
+                    <div className="details-item"> 
+                      Temperatura: {convertTemperature(dzień.temperatura, unit)}{unitSymbol} 
+                    </div>
+                    {dzień.kierunekWiatru && <div className="details-item">Kierunek wiatru: {dzień.kierunekWiatru}</div>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
     )
 }
